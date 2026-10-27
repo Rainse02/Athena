@@ -1,0 +1,13 @@
+{
+  "channel_names": {
+    "0": "T2"
+  },
+  "labels": {
+    "background": 0,
+    "Detach": 1,
+    "InternalCrack": 2,
+    "SurfaceCrack": 3
+  },
+  "numTraining": 125,
+  "file_ending": ".tif"
+}
