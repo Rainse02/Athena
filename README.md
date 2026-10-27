@@ -1,7 +1,7 @@
 # Athena for battery defect identification and analysis
 
 This repository provides the defect identification and analysis code for the
-manuscript **Mapping Curvature-Associated Structural Defects and Heterogeneity
+paper **Mapping Curvature-Associated Structural Defects and Heterogeneity
 in a Pristine Commercial Li–MnO2 Battery**.
 
 Athena (Analytical Tomography for Heterogeneity-aware Electrode Network Analysis)
