@@ -1,99 +1,63 @@
-# Athena: battery electrode defect analysis
+# Athena
 
-Athena contains the study-specific Python code accompanying **Mapping
-Curvature-Associated Structural Defects and Heterogeneity in a Pristine
-Commercial Li–MnO2 Battery**. The code quantifies material and structural
-defects in an electrochemical battery cell after image segmentation and
-processes numerical mechanics results used in the study.
+Athena (Analytical Tomography for Heterogeneity-aware Electrode Network Analysis)
+provides the analysis code for **Mapping Curvature-Associated Structural Defects
+and Heterogeneity in a Pristine Commercial Li–MnO2 Battery**.
 
-The repository contains source code, analysis configuration, and documentation.
-Image volumes, measured tables, numerical field exports, trained weights,
-third-party framework source, and native simulation models are outside this
-software repository. Running the study analyses requires the external inputs
-described in [docs/INPUTS.md](docs/INPUTS.md).
+The code analyzes three electrode defect classes: Detachment, Internal Crack,
+and Surface Crack.
 
-## Contents
+## Installation
 
-| Location | Purpose |
+```bash
+pip install -r requirements.txt
+```
+
+## Analysis
+
+All analysis scripts are in [Analysis](Analysis/).
+
+| Script | Description |
 | --- | --- |
-| [Analisys/](Analisys/README.md) | All seven complete original analysis scripts retained from the original repository |
-| [code/analysis/](code/analysis/README.md) | Winding geometry, defect statistics, exposure normalization, sensitivity analysis, axial profiles, segmentation metrics, and image-analysis methods |
-| [code/mechanics/](code/mechanics/README.md) | Surface/interface statistics, winding-path deformation summaries, and the axial-edge analytical solution |
-| [configs/](configs/) | Image-analysis settings and input-path configuration |
-| [docs/WORK_DESCRIPTION.md](docs/WORK_DESCRIPTION.md) | Scientific methods, manuscript correspondence, and interpretation limits |
-| [docs/INPUTS.md](docs/INPUTS.md) | External input structure, fields, and units |
-| [docs/VALIDATION.md](docs/VALIDATION.md) | Execution checks and their scope |
-| [CITATION.cff](CITATION.cff) | Machine-readable software citation metadata |
-| [docs/ZENODO.md](docs/ZENODO.md) | Preparation of a versioned software archive and DOI |
+| [Density_Thermogram.py](Analysis/Density_Thermogram.py) | Plots defect density on the flattened electrode surface. |
+| [Current_Collector_Intersection_Detect.py](Analysis/Current_Collector_Intersection_Detect.py) | Detects intersections in the flattened current-collector grid. |
+| [Radia_Distribution.py](Analysis/Radia_Distribution.py) | Calculates the radial distribution of defects. |
+| [Vertical_Distribution.py](Analysis/Vertical_Distribution.py) | Compares axial defect profiles with the distribution of collector intersections. |
+| [Angle_Distribution.py](Analysis/Angle_Distribution.py) | Calculates the angular distribution of defects. |
+| [Curvature_Distibution.py](Analysis/Curvature_Distibution.py) | Fits the electrode winding curve, assigns local curvature to defect objects, and plots their volume-weighted distributions. |
+| [Flatten_Intensity.py](Analysis/Flatten_Intensity.py) | Calculates defect intensity along the flattened electrode. |
+| [fixed_center_statistics.py](Analysis/fixed_center_statistics.py) | Calculates object statistics, curvature enrichment, regional comparisons, and sensitivity to component volume and curvature intervals. |
+| [rebuild_saved_fit.py](Analysis/rebuild_saved_fit.py) | Fits the Archimedean spiral to the extracted electrode contour. |
+| [node_alignment.py](Analysis/node_alignment.py) | Calculates the period and lag correlation of axial defect and collector-node profiles. |
+| [axial_ends.py](Analysis/axial_ends.py) | Summarizes defect and collector-node profiles in ten axial intervals. |
+| [validation_metrics.py](Analysis/validation_metrics.py) | Calculates Dice, IoU, precision, and recall from segmentation validation counts. |
 
-## Environment
+Functions for collector analysis (`collector.py`), spatial
+profiles (`spatial.py`), density estimation (`density.py`), curve geometry
+(`curvature_geometry.py`), path normalization (`normalization.py`), regional
+statistics (`regions.py`), and volume sensitivity (`volume_sensitivity.py`)
+support these calculations.
 
-Use a dedicated Python environment. The selected analyses were checked with
-Python 3.12.5 and the versions listed in `requirements.txt`.
+Set the input and result directories in [settings.py](Analysis/settings.py).
+Image files, contour points, object measurements, and profile tables are
+selected in the corresponding scripts. For example:
 
-```console
-python -m pip install -r requirements.txt
+```bash
+python Analysis/Curvature_Distibution.py
+python Analysis/fixed_center_statistics.py
+python Analysis/node_alignment.py
 ```
 
-For the original standalone scripts in `Analisys/`, install their additional
-dependencies with `python -m pip install -r requirements-original.txt`. Their
-README describes the original path settings and expected inputs.
+## Citation
 
-NumPy, SciPy, pandas, and Matplotlib support the numerical analyses. The image
-methods additionally use OpenCV with `ximgproc`, scikit-image, tifffile, and
-Pillow. The scripts do not require a segmentation training environment or a
-finite-element solver.
+Yifei Yan, Kaile Niu, Lei Cai, Zhengxiang Song, Ke Du, Guibin Zan,
+Fangyang Liu, and Jinhao Meng.
 
-## Running the analyses
+**Mapping Curvature-Associated Structural Defects and Heterogeneity in a
+Pristine Commercial Li–MnO2 Battery.**
 
-Run commands from the repository root. `--data-root` is an external directory
-containing the `analysis/` and `mechanics/` input subdirectories. Outputs are
-written to the directory supplied with `--output-root`.
+Citation metadata are provided in [CITATION.cff](CITATION.cff).
 
-```console
-python code/analysis/run_all.py --data-root /path/to/study-data --output-root /path/to/results
-python code/mechanics/run_all.py --data-root /path/to/study-data --output-root /path/to/results
-```
+## License
 
-For Windows, use a quoted path such as `"E:/research/study-data"`.
-The directory structure must follow [docs/INPUTS.md](docs/INPUTS.md).
-There are no measured data files in a fresh clone.
-
-Select an individual statistical task with `--task`:
-
-```console
-python code/analysis/run_all.py --task nodes --data-root /path/to/study-data --output-root /path/to/results
-python code/analysis/run_image_tools.py --help
-python code/mechanics/axial_edge_theory.py --help
-```
-
-The axial-edge evaluator is independent of measured data. It requires explicit
-axial height, transfer length, and mismatch strain. Run its equation and
-boundary-condition checks with:
-
-```console
-python code/mechanics/test_axial_edge_theory.py
-```
-
-## Scope of reproduction
-
-Statistical reproduction requires the recorded contour, object measurements,
-regional counts, and profiles. Mechanics post-processing requires exported
-numerical samples. These scripts do not regenerate raw image reconstruction,
-external unfolding, segmentation, or finite-element solutions.
-
-The three analyzed classes are Detachment, Internal Crack, and Surface Crack.
-Calculations retain the study's fixed-center winding fit, coordinate
-conventions, physical spacing, percentile definitions, and analysis intervals.
-Review these settings before applying the code to another cell.
-[WORK_DESCRIPTION.md](docs/WORK_DESCRIPTION.md) explains the assumptions and
-distinguishes descriptive associations from mechanical failure criteria.
-
-## Citation and license
-
-Software metadata are in [CITATION.cff](CITATION.cff); manuscript information
-is in [CITATION.md](CITATION.md). A DOI and release date will be added when a
-release is archived. No DOI has been assigned by this preparation step.
-
-The repository retains its Apache License 2.0 licensing; see [LICENSE](LICENSE).
-Dependencies are installed separately and retain their respective licenses.
+[Apache License 2.0](LICENSE).

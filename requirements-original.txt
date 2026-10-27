@@ -1,9 +1,0 @@
-# Additional imports used by the complete original Analisys scripts.
-# NumPy remains pinned below version 2 because an original script imports numpy.array_api.
--r requirements.txt
-scikit-learn==1.5.2
-seaborn==0.13.2
-sympy==1.12
-networkx==3.2.1
-imagecodecs==2024.9.22
-openpyxl==3.1.5

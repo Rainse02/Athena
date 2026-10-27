@@ -1,5 +1,4 @@
-# Python 3.12.5 was used to check this archive.
-# These are the versions installed in the study's analysis environment.
+# Python 3.12
 numpy==1.26.3
 scipy==1.14.1
 pandas==2.2.3
@@ -8,3 +7,9 @@ opencv-contrib-python==4.11.0.86
 scikit-image==0.24.0
 tifffile==2024.9.20
 Pillow==10.2.0
+scikit-learn==1.5.2
+seaborn==0.13.2
+sympy==1.12
+networkx==3.2.1
+imagecodecs==2024.9.22
+openpyxl==3.1.5

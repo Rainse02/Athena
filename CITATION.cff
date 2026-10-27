@@ -1,7 +1,6 @@
 cff-version: 1.2.0
 message: >-
-  If you use this software, cite Athena and the associated battery study.
-  A version-specific software DOI will be added after archival publication.
+  Please cite Athena and the associated battery study when using this code.
 type: software
 title: "Athena: code for curvature-associated battery electrode defect analysis"
 authors:
@@ -28,13 +27,11 @@ abstract: >-
   Study-specific Python code for post-segmentation analysis of material and
   structural defects in a commercial Li-MnO2 battery cell. The software covers
   winding geometry, curvature- and path-normalized defect statistics,
-  spatial and axial profiles, sensitivity calculations, validation metrics,
-  numerical mechanics post-processing, and an axial-edge analytical solution.
-  Measured inputs and simulation models are not part of the software archive.
+  spatial and axial profiles, sensitivity calculations, and segmentation
+  validation metrics.
 keywords:
   - electrochemical battery cell
   - electrode structural defects
   - X-ray computed tomography
   - winding curvature
   - spatial statistics
-  - mechanics post-processing
