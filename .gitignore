@@ -1,0 +1,38 @@
+# External inputs and generated results are not software-release contents.
+/data/
+/outputs/
+/reference_results/
+/models/
+/nnunetv2/
+/external/
+/tmp/
+
+# Models, learned parameters, images, and result containers.
+*.mph
+*.mphbin
+*.mphbak
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.tif
+*.tiff
+*.nii
+*.nii.gz
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.zip
+*.7z
+
+# Python and local tooling.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

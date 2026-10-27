@@ -1,0 +1,62 @@
+{
+  "curvature_geometry.py": {
+    "original_source": "curvature.py",
+    "adaptation": "Original two numerical geometry helpers; alternate fit methods omitted."
+  },
+  "normalization.py": {
+    "original_source": "revision_normalization_20260906.py",
+    "adaptation": "Original normalization and plot functions only; selected geometry inputs supplied by driver."
+  },
+  "regions.py": {
+    "original_source": "revision_region_scope_20260908.py",
+    "adaptation": "Original regional/sensitivity functions; original TIFF streaming and superseded region schemes omitted."
+  },
+  "volume_sensitivity.py": {
+    "original_source": "revision_resolution_20260910.py",
+    "adaptation": "Original cutoff calculation and figures; driver supplies final mappings and portable output directory."
+  },
+  "fixed_center_statistics.py": {
+    "original_source": "revision_legacy_statistics_20260910.py",
+    "adaptation": "Original final calculation functions; paths adapted, internal alternate-method comparison chain and development-only quality gates omitted; true descriptive fit residuals and thickness diagnostics retained."
+  },
+  "rebuild_saved_fit.py": {
+    "original_source": "revision_legacy_spiral_comparison_20260910.py:fit_legacy",
+    "adaptation": "Original fixed-center polar conversion and default curve_fit expressions; input adapter reads saved contour instead of source image extraction."
+  },
+  "node_alignment.py": {
+    "original_source": "revision_node_phase_20260908.py",
+    "adaptation": "Original period, detrending and lag functions; directly supplied common profiles replace original large radial cache/marker image loading."
+  },
+  "axial_ends.py": {
+    "original_source": "summarize_axial_ends_20260911.py",
+    "adaptation": "Original equal-height summary; published common profile and relative output paths."
+  },
+  "validation_metrics.py": {
+    "original_source": "audit_validation_metrics_20260910.py",
+    "adaptation": "Original per-case Dice/IoU and pooled precision/recall formulas; only the three study classes, with null representing absent-class NaN."
+  },
+  "athena_analysis/common.py": {
+    "original_source": "common.py",
+    "adaptation": "Original image/numerical/JSON helpers; unrelated manifest, environment and hashing helpers omitted."
+  },
+  "athena_analysis/collector.py": {
+    "original_source": "collector.py",
+    "adaptation": "Original scientific image-analysis functions retained unchanged."
+  },
+  "athena_analysis/density.py": {
+    "original_source": "density.py",
+    "adaptation": "Original scientific image-analysis functions retained unchanged."
+  },
+  "athena_analysis/spatial.py": {
+    "original_source": "spatial.py",
+    "adaptation": "Original scientific image-analysis functions retained unchanged."
+  },
+  "package_paths.py": {
+    "original_source": null,
+    "adaptation": "Repository adapter: external ATHENA_DATA_ROOT and ATHENA_OUTPUT_ROOT; direct-module CLI help and missing-input messages. Roots are selected before numerical module imports by run_all.py and run_image_tools.py."
+  },
+  "run_image_tools.py": {
+    "original_source": "run_image_tools.py",
+    "adaptation": "Command-line adapter; settings retained in configs/image_analysis.json, with relative input paths resolved beneath the explicit external data root. Numerical image methods are unchanged."
+  }
+}

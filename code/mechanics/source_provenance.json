@@ -1,0 +1,28 @@
+{
+  "analyze_bending.py": [
+    "analyze_bending.py"
+  ],
+  "analyze_end_bending.py": [
+    "analyze_end_bending.py"
+  ],
+  "metrics.py": [
+    "analyze_results.py",
+    "analyze_combined.py"
+  ],
+  "analyze_cumulative_transfer.py": [
+    "analyze_cumulative_transfer_20260908.py"
+  ],
+  "analyze_surface_strain.py": [
+    "mechanics.py",
+    "run_mechanics_theory.py (published normalization constants only)"
+  ],
+  "adaptations": [
+    "Read external inputs beneath ATHENA_DATA_ROOT/mechanics and write beneath ATHENA_OUTPUT_ROOT/mechanics; run_all.py selects roots before numerical module imports; default roots are repository data/ and outputs/",
+    "Extract only helpers used by final numerical post-processing",
+    "Remove superseded surface-guided F comparison",
+    "Select the four finite-end ell=5 mm winding-prefix profiles adopted in Figure S17",
+    "Keep the SI symmetric strain estimate; omit prior literature-analogue screening families",
+    "Reproduce archived current signed-axial statistics from saved matrix sx values using the original geometry masks and NumPy linear-interpolation P95; retain nearest-rank for the original end-bending matrix summaries",
+    "Provide direct-module help and concise missing-input messages through the repository package_paths.py adapter; retain numerical calculations"
+  ]
+}

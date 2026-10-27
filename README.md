@@ -1,117 +1,99 @@
-# Battery Electrode Defect Identification and Analysis
+# Athena: battery electrode defect analysis
 
-This repository provides supporting code for CT-based electrode defect identification and spatial analysis in lithium-based batteries. The segmentation step uses nnU-Net v2 as an external open-source framework. The main purpose of this repository is to support material and structural analysis after defect segmentation, rather than to introduce a new segmentation algorithm.
+Athena contains the study-specific Python code accompanying **Mapping
+Curvature-Associated Structural Defects and Heterogeneity in a Pristine
+Commercial Li–MnO2 Battery**. The code quantifies material and structural
+defects in an electrochemical battery cell after image segmentation and
+processes numerical mechanics results used in the study.
 
-## Scope
+The repository contains source code, analysis configuration, and documentation.
+Image volumes, measured tables, numerical field exports, trained weights,
+third-party framework source, and native simulation models are outside this
+software repository. Running the study analyses requires the external inputs
+described in [docs/INPUTS.md](docs/INPUTS.md).
 
-This repository includes scripts for:
+## Contents
 
-- preparing CT images and labels in the nnU-Net v2 dataset format;
-- training or applying an nnU-Net-based segmentation model for electrode defects;
-- analyzing the spatial distribution of segmented defects in flattened, radial, vertical, angular, and curvature-related coordinates.
-
-The defect classes used in this work are:
-
-- `Detach`: loss of contact between the current collector and active material;
-- `InternalCrack`: cracks inside the electrode material;
-- `SurfaceCrack`: open cracks located at the electrode surface.
-
-## Segmentation framework
-
-The defect segmentation workflow is based on [nnU-Net v2](https://github.com/MIC-DKFZ/nnUNet). Please install and configure nnU-Net according to the official documentation.
-
-Install PyTorch first according to your hardware environment, then install nnU-Net v2:
-
-```bash
-pip install nnunetv2
-```
-
-nnU-Net also requires the raw-data, preprocessed-data, and result directories to be defined through its environment variables. See the official [installation instructions](https://github.com/MIC-DKFZ/nnUNet/blob/master/documentation/installation_instructions.md) and [documentation](https://github.com/MIC-DKFZ/nnUNet/tree/master/documentation) for details.
-
-## Dataset structure
-
-The training dataset follows the nnU-Net v2 format:
-
-```text
-Dataset001_BatteryElectrode/
-├── dataset.json
-├── imagesTr/
-└── labelsTr/
-```
-
-An example `dataset.json` is shown below:
-
-```json
-{
-  "channel_names": {
-    "0": "CT"
-  },
-  "labels": {
-    "background": 0,
-    "Detach": 1,
-    "InternalCrack": 2,
-    "SurfaceCrack": 3
-  },
-  "numTraining": 125,
-  "file_ending": ".tif"
-}
-```
-
-The channel name is descriptive and can be changed to match the actual CT dataset. Keep the same label definitions when reproducing a trained model.
-
-## Training and prediction
-
-The 2D nnU-Net configuration was used in this work for slice-based CT defect segmentation.
-
-Preprocess the dataset:
-
-```bash
-nnUNetv2_plan_and_preprocess -d 001 --verify_dataset_integrity
-```
-
-Train the model:
-
-```bash
-nnUNetv2_train 001 2d <fold> --npz
-```
-
-Run prediction:
-
-```bash
-nnUNetv2_predict -i <input_ct_folder> -o <output_folder> -d 001 -c 2d -f <fold> --save_probabilities
-```
-
-`<input_ct_folder>` is the folder containing CT images for prediction, and `<output_folder>` is the folder used to save the segmentation results. The `<fold>` used for prediction should match an available trained fold.
-
-## Analysis scripts
-
-After segmentation, the following scripts are used for statistical analysis of defect distributions.
-
-| Script | Purpose |
+| Location | Purpose |
 | --- | --- |
-| [`Analisys/Density_Thermogram.py`](Analisys/Density_Thermogram.py) | Plots defect density maps on the flattened electrode surface. |
-| [`Analisys/Current_Collector_Intersection_Detect.py`](Analisys/Current_Collector_Intersection_Detect.py) | Detects and plots key grid nodes after flattening the current collector. |
-| [`Analisys/Radia_Distribution.py`](Analisys/Radia_Distribution.py) | Analyzes defect distribution along the radial direction of the cell. |
-| [`Analisys/Vertical_Distribution.py`](Analisys/Vertical_Distribution.py) | Analyzes defect distribution along the vertical direction of the cell. |
-| [`Analisys/Angle_Distribution.py`](Analisys/Angle_Distribution.py) | Analyzes defect distribution along the angular direction of the cell. |
-| [`Analisys/Curvature_Distibution.py`](Analisys/Curvature_Distibution.py) | Relates individual defects to local electrode curvature obtained from the fitted winding curve. |
-| [`Analisys/Flatten_Intensity.py`](Analisys/Flatten_Intensity.py) | Analyzes defect distribution along the flattened electrode direction. |
+| [Analisys/](Analisys/README.md) | All seven complete original analysis scripts retained from the original repository |
+| [code/analysis/](code/analysis/README.md) | Winding geometry, defect statistics, exposure normalization, sensitivity analysis, axial profiles, segmentation metrics, and image-analysis methods |
+| [code/mechanics/](code/mechanics/README.md) | Surface/interface statistics, winding-path deformation summaries, and the axial-edge analytical solution |
+| [configs/](configs/) | Image-analysis settings and input-path configuration |
+| [docs/WORK_DESCRIPTION.md](docs/WORK_DESCRIPTION.md) | Scientific methods, manuscript correspondence, and interpretation limits |
+| [docs/INPUTS.md](docs/INPUTS.md) | External input structure, fields, and units |
+| [docs/VALIDATION.md](docs/VALIDATION.md) | Execution checks and their scope |
+| [CITATION.cff](CITATION.cff) | Machine-readable software citation metadata |
+| [docs/ZENODO.md](docs/ZENODO.md) | Preparation of a versioned software archive and DOI |
 
-Some analysis steps require external geometric inputs, such as the flattened electrode surface or the fitted winding curve. These inputs should be generated before running the corresponding scripts.
+## Environment
 
-## License
+Use a dedicated Python environment. The selected analyses were checked with
+Python 3.12.5 and the versions listed in `requirements.txt`.
 
-This repository is released under the license provided in [`LICENSE`](LICENSE). nnU-Net is a separate upstream project and is governed by its own license.
-
-## Citation
-
-If the segmentation workflow based on nnU-Net is used, please cite the original nnU-Net paper:
-
-```text
-Isensee, F., Jaeger, P. F., Kohl, S. A. A., Petersen, J., & Maier-Hein, K. H. (2021).
-nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation.
-Nature Methods, 18, 203–211.
-https://doi.org/10.1038/s41592-020-01008-z
+```console
+python -m pip install -r requirements.txt
 ```
 
-Please also cite the related battery defect analysis paper when it becomes available.
+For the original standalone scripts in `Analisys/`, install their additional
+dependencies with `python -m pip install -r requirements-original.txt`. Their
+README describes the original path settings and expected inputs.
+
+NumPy, SciPy, pandas, and Matplotlib support the numerical analyses. The image
+methods additionally use OpenCV with `ximgproc`, scikit-image, tifffile, and
+Pillow. The scripts do not require a segmentation training environment or a
+finite-element solver.
+
+## Running the analyses
+
+Run commands from the repository root. `--data-root` is an external directory
+containing the `analysis/` and `mechanics/` input subdirectories. Outputs are
+written to the directory supplied with `--output-root`.
+
+```console
+python code/analysis/run_all.py --data-root /path/to/study-data --output-root /path/to/results
+python code/mechanics/run_all.py --data-root /path/to/study-data --output-root /path/to/results
+```
+
+For Windows, use a quoted path such as `"E:/research/study-data"`.
+The directory structure must follow [docs/INPUTS.md](docs/INPUTS.md).
+There are no measured data files in a fresh clone.
+
+Select an individual statistical task with `--task`:
+
+```console
+python code/analysis/run_all.py --task nodes --data-root /path/to/study-data --output-root /path/to/results
+python code/analysis/run_image_tools.py --help
+python code/mechanics/axial_edge_theory.py --help
+```
+
+The axial-edge evaluator is independent of measured data. It requires explicit
+axial height, transfer length, and mismatch strain. Run its equation and
+boundary-condition checks with:
+
+```console
+python code/mechanics/test_axial_edge_theory.py
+```
+
+## Scope of reproduction
+
+Statistical reproduction requires the recorded contour, object measurements,
+regional counts, and profiles. Mechanics post-processing requires exported
+numerical samples. These scripts do not regenerate raw image reconstruction,
+external unfolding, segmentation, or finite-element solutions.
+
+The three analyzed classes are Detachment, Internal Crack, and Surface Crack.
+Calculations retain the study's fixed-center winding fit, coordinate
+conventions, physical spacing, percentile definitions, and analysis intervals.
+Review these settings before applying the code to another cell.
+[WORK_DESCRIPTION.md](docs/WORK_DESCRIPTION.md) explains the assumptions and
+distinguishes descriptive associations from mechanical failure criteria.
+
+## Citation and license
+
+Software metadata are in [CITATION.cff](CITATION.cff); manuscript information
+is in [CITATION.md](CITATION.md). A DOI and release date will be added when a
+release is archived. No DOI has been assigned by this preparation step.
+
+The repository retains its Apache License 2.0 licensing; see [LICENSE](LICENSE).
+Dependencies are installed separately and retain their respective licenses.
